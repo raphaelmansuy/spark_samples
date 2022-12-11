@@ -1,4 +1,4 @@
-# A simple example to show how correctly query a large JDBC database in Spark
+# A simple example of how to correctly query a large JDBC database
 
 ## What does this example do?
 
