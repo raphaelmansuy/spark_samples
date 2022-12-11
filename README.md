@@ -2,14 +2,26 @@
 
 ## What does this example do?
 
+## 🚀How to run this example
 
-## 🚀How to run this example 
-
-```bash 
+```bash
 sbt run
 ```
 
-## 📁 Structure of the project 
+## Prerequisites
+
+- Docker
+  - Docker is used to run the database and the minio server.
+- sbt
+  - sbt is a build tool for Scala, Java, and more. It is used here to manage the project's dependencies and build.
+  - You need add a global sbt configure in your home direcyory `~/.sbt/1.0/plugins/global.sbt` with the following content:
+    ```scala
+    resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+    ```
+- scala
+  - scala 2.12.17 is the version of scala used in this project.
+
+## 📁 Structure of the project
 
 ```bash
 .
@@ -34,16 +46,15 @@ sbt run
 
 ```
 
-
 ## What this example is doing ?
- 
+
 ### 👉 The data model of the source
 
 ```sql
-CREATE TABLE IF NOT EXISTS users 
-    (id INT PRIMARY KEY, firstName TEXT, 
-     lastName TEXT, age INT, 
-     numFriends INT, 
+CREATE TABLE IF NOT EXISTS users
+    (id INT PRIMARY KEY, firstName TEXT,
+     lastName TEXT, age INT,
+     numFriends INT,
      date_created TIMESTAMP)
 ```
 
@@ -76,10 +87,8 @@ sequenceDiagram
 
 TODO
 
-
 ### The data model of the destination
 
 A parquet file with the same schema as the source
-
 
 Created with ❤️ by Raphaël MANSUY
