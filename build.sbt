@@ -32,6 +32,9 @@ libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14"
 
 libraryDependencies += "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.40.11" % "test"
 
+resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
+
+
 
 
 
