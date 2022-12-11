@@ -5,10 +5,11 @@ import java.time.Instant
 
 object Faker {
   // Create a random user
-  def randomUser(): User = {
+  def randomUser(userId: Option[Int] = None): User = {
     val instant = Instant.now()
     val timestamp = Timestamp.from(instant)
-    val id = scala.util.Random.nextInt(100000000)
+    // get a random id between 0 and 100000000 if no id is provided
+    val id = userId.getOrElse(scala.util.Random.nextInt(100000000))
     // get a random first name from from the list
     val firstName = scala.util.Random.shuffle(firstNames).head
 		// get a random last name from from the list

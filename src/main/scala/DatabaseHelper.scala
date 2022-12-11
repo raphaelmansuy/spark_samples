@@ -69,7 +69,7 @@ object DatabaseHelper {
       // print the batch index on the console
       println(f"👉 Batch $batch/$numBatches")
       // generate a list of random users
-      val users = (1 to batchSize).map(_ => Faker.randomUser()).toList
+      val users = (1 to batchSize).map(n => Faker.randomUser(Some(batch*batchSize+n))).toList
       // Insert the users into the database in bulk of 1000 users
       val sql =
         "INSERT INTO users (id, firstName, lastName, age, numFriends, date_created) VALUES (?, ?, ?, ?, ?, ?)"
