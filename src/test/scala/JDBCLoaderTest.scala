@@ -71,6 +71,28 @@ class JDBCLoaderTest extends AnyFunSuite with PostgresContainer {
     assert(users.count() == nbUsers)
   }
 
+
+  test("JDBCLoaderTest safeLoad users table with partition and 10 connection") {
+    val loader = new JDBCLoader(this.getUrl(), this.getUser(), this.getPassword(), driver = jdbcspark.JDBCDriverEnumeration.PostgreSQL.toString)
+    val spark = SparkSession.builder().master("local").getOrCreate()
+
+    val (minId: Int, maxId: Int, count: Int) = getMinMaxCount
+
+    val numPartitions = Math.min(Math.ceil(count.toDouble * 512.0 / (128 * 1024 /* *1024.0*/)).toInt, 200)
+    val nbConnections = 10
+
+    println(s"✅ numPartitions = $numPartitions")
+    println(s"🔥 nbConnections = $nbConnections")
+
+    val users = loader.load(spark, "users", "id", minId, maxId, numPartitions,nbConnections)
+
+    // display first 100 rows
+    users.show(100, false)
+    val nbUsers = users.count()
+    println(s"👩‍🤖 nbUsers = ${nbUsers}")
+    assert(users.count() == nbUsers)
+  }
+
   private def getMinMaxCount = {
     // get min and max id
     val connection = this.getConnection()

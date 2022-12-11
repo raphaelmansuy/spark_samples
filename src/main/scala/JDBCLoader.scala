@@ -35,7 +35,7 @@ class JDBCLoader(url: String, user: String, password: String, driver: JDBCDriver
 		jdbcDF
   }
 
-  def load(spark: org.apache.spark.sql.SparkSession,table:String, partitionColumn: String, lowerBound: Int, upperBound: Int, numPartitions: Int): DataFrame  = {
+  private def _load(spark: org.apache.spark.sql.SparkSession,table:String, partitionColumn: String, lowerBound: Int, upperBound: Int, numPartitions: Int): DataFrame  = {
     val jdbcDF = spark.read
         .format("jdbc")
         .options(defaultJDBCOptions ++ getJDBCOptions(partitionColumn, lowerBound, upperBound, numPartitions))
@@ -43,6 +43,19 @@ class JDBCLoader(url: String, user: String, password: String, driver: JDBCDriver
         .load()
     jdbcDF
   }
+
+   def load(spark: org.apache.spark.sql.SparkSession,table:String, partitionColumn: String, lowerBound: Int, upperBound: Int, numPartitions: Int, maxConnection: Int = 1): DataFrame  = {
+
+      // generate a sequence of partitions
+    val numPartitionsPerConnection =  Math.max(1,numPartitions /  Math.max(1,maxConnection))
+    val partitions = (lowerBound to upperBound by (upperBound - lowerBound) / numPartitionsPerConnection).sliding(2).toList
+    // use _load to create a list of dataframes
+    val dataframes = partitions.map(p => _load(spark, table, partitionColumn, p(0), p(1), maxConnection))
+    // union all dataframes
+    val unionDF = dataframes.reduce((df1, df2) => df1.union(df2))
+    unionDF
+  }
+
 
   def safeLoad(spark: org.apache.spark.sql.SparkSession, table: String, partitionColumn: String, lowerBound: Int, upperBound: Int, numPartitions: Int): DataFrame = {
     // generate a sequence of partitions
