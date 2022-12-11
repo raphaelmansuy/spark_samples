@@ -68,7 +68,7 @@ sequenceDiagram
     SimpleAppSpark ->>+ JDBCLoader: load a DataFrame with Spark
     JDBCLoader ->>+ Database: load
     JDBCLoader -->>- SimpleAppSpark: a DataFrame
-    SimpleAppSpark ->>+ ParquetWriter: save a DataFrame to parque
+    SimpleAppSpark ->>+ ParquetWriter: save a DataFrame to parquet
     ParquetWriter ->>+ HDFS: save parquet files
 ```
 
