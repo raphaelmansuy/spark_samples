@@ -14,7 +14,7 @@ sbt run
   - Docker is used to run the database and the minio server.
 - sbt
   - sbt is a build tool for Scala, Java, and more. It is used here to manage the project's dependencies and build.
-  - You need add a global sbt configure in your home direcyory `~/.sbt/1.0/plugins/global.sbt` with the following content:
+  - You need add a global sbt configure in your home diretory `~/.sbt/1.0/plugins/global.sbt` with the following content:
     ```scala
     resolvers += "Artima Maven Repository" at "https://repo.artima.com/releases"
     ```
